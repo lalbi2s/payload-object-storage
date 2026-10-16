@@ -37,3 +37,9 @@ def clean_filename(filename: str) -> str:
 
 def make_object_key(filename: str) -> str:
     return f"{uuid.uuid4()}-{clean_filename(filename)}"
+
+
+def check_text(value: str, field: str) -> None:
+    # S3 metadata only accepts ASCII text.
+    if not value.strip() or not value.isascii() or len(value) > 100:
+        raise ValidationError(f"{field} must be 1 to 100 ASCII characters")

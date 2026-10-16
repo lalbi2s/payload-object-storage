@@ -6,6 +6,7 @@ from app.validation import (
     check_date,
     check_extension,
     check_size,
+    check_text,
     clean_filename,
     make_object_key,
 )
@@ -52,3 +53,13 @@ def test_same_filename_gives_different_keys():
     second = make_object_key("scene.tif")
     assert first != second
     assert first.endswith("-scene.tif")
+
+
+def test_empty_text_is_rejected():
+    with pytest.raises(ValidationError):
+        check_text("  ", "satellite")
+
+
+def test_non_ascii_text_is_rejected():
+    with pytest.raises(ValidationError):
+        check_text("Sentinel-2é", "satellite")
